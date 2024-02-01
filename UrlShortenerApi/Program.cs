@@ -1,5 +1,6 @@
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using UrlShortenerApi.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,5 +21,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.MapUrlEndpoints();
 
 app.Run();
