@@ -34,10 +34,22 @@ namespace Infrastructure.Migrations
                 columns: new[] { "Id", "CreatedAt", "OriginalUrl", "ShortenedUrl" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2237), "https://www.youtube.com/", "" },
-                    { 2L, new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2239), "https://www.youtube.com/", "" },
-                    { 3L, new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2241), "https://www.youtube.com/", "" }
+                    { 1L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9594), "https://www.youtube.com/", "PQ" },
+                    { 2L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9611), "https://learn.microsoft.com/", "Mn" },
+                    { 3L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9622), "https://www.linkedin.com/feed/", "wQ" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Urls_OriginalUrl",
+                table: "Urls",
+                column: "OriginalUrl",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Urls_ShortenedUrl",
+                table: "Urls",
+                column: "ShortenedUrl",
+                unique: true);
         }
 
         /// <inheritdoc />

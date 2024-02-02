@@ -1,4 +1,6 @@
+using HashidsNet;
 using Infrastructure.Data;
+using Infrastructure.Mediatr.Handlers.Urls;
 using Microsoft.EntityFrameworkCore;
 using UrlShortenerApi.Endpoints;
 
@@ -9,8 +11,14 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApiDataContext>(opts =>
 {
-    opts.UseNpgsql(builder.Configuration.GetConnectionString("UrlShortenerDb"));
+    opts.UseNpgsql(builder.Configuration.GetConnectionString("UrlShortenerDb")).EnableSensitiveDataLogging();
 });
+
+
+builder.Services.AddSingleton<IHashids>(_ => new Hashids("UrlShortener"));
+
+
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<ShortUrlHandler>());
 
 var app = builder.Build();
 

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApiDataContext))]
-    [Migration("20240201184559_Initial")]
+    [Migration("20240202182549_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -46,29 +46,35 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OriginalUrl")
+                        .IsUnique();
+
+                    b.HasIndex("ShortenedUrl")
+                        .IsUnique();
+
                     b.ToTable("Urls");
 
                     b.HasData(
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2237),
+                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9594),
                             OriginalUrl = "https://www.youtube.com/",
-                            ShortenedUrl = ""
+                            ShortenedUrl = "PQ"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2239),
-                            OriginalUrl = "https://www.youtube.com/",
-                            ShortenedUrl = ""
+                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9611),
+                            OriginalUrl = "https://learn.microsoft.com/",
+                            ShortenedUrl = "Mn"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 2, 1, 18, 45, 59, 51, DateTimeKind.Utc).AddTicks(2241),
-                            OriginalUrl = "https://www.youtube.com/",
-                            ShortenedUrl = ""
+                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9622),
+                            OriginalUrl = "https://www.linkedin.com/feed/",
+                            ShortenedUrl = "wQ"
                         });
                 });
 #pragma warning restore 612, 618

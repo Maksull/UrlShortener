@@ -15,5 +15,12 @@ public sealed class ApiDataContext : DbContext
         base.OnModelCreating(builder);
 
         builder.ApplyConfiguration(new UrlConfiguration());
+
+        builder.Entity<Url>(build =>
+        {
+            build.HasKey(x => x.Id);
+            build.HasIndex(u => u.OriginalUrl).IsUnique();
+            build.HasIndex(u => u.ShortenedUrl).IsUnique();
+        });
     }
 }

@@ -1,12 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace Core.Entities;
 
 public sealed class Url
 {
-    [Key]
-    public required long Id { get; set; }
+    public long Id { get; set; }
     public required string OriginalUrl { get; set; }
-    public required string ShortenedUrl { get; set; }
+    public string ShortenedUrl { get; set; } = string.Empty;
     public required DateTime CreatedAt { get; set; }
 }
