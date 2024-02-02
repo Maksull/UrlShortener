@@ -17,21 +17,24 @@ internal sealed class UrlConfiguration : IEntityTypeConfiguration<Url>
             {
                 Id = 1,
                 OriginalUrl = "https://www.youtube.com/",
-                ShortenedUrl = hashIds.EncodeLong(1),
+                ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(1)}",
+                Code = hashIds.EncodeLong(1),
                 CreatedAt = DateTime.UtcNow,
             },
             new()
             {
                 Id = 2,
                 OriginalUrl = "https://learn.microsoft.com/",
-                ShortenedUrl = hashIds.EncodeLong(2),
+                ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(2)}",
+                Code = hashIds.EncodeLong(2),
                 CreatedAt = DateTime.UtcNow,
             },
             new()
             {
                 Id = 3,
                 OriginalUrl = "https://www.linkedin.com/feed/",
-                ShortenedUrl = hashIds.EncodeLong(3),
+                ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(3)}",
+                Code = hashIds.EncodeLong(3),
                 CreatedAt = DateTime.UtcNow,
             },
         };

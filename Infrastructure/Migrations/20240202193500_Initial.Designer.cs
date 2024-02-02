@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApiDataContext))]
-    [Migration("20240202182549_Initial")]
+    [Migration("20240202193500_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -32,6 +32,10 @@ namespace Infrastructure.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
@@ -58,23 +62,26 @@ namespace Infrastructure.Migrations
                         new
                         {
                             Id = 1L,
-                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9594),
+                            Code = "PQ",
+                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5693),
                             OriginalUrl = "https://www.youtube.com/",
-                            ShortenedUrl = "PQ"
+                            ShortenedUrl = "https://localhost:7167/PQ"
                         },
                         new
                         {
                             Id = 2L,
-                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9611),
+                            Code = "Mn",
+                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5726),
                             OriginalUrl = "https://learn.microsoft.com/",
-                            ShortenedUrl = "Mn"
+                            ShortenedUrl = "https://localhost:7167/Mn"
                         },
                         new
                         {
                             Id = 3L,
-                            CreatedAt = new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9622),
+                            Code = "wQ",
+                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5757),
                             OriginalUrl = "https://www.linkedin.com/feed/",
-                            ShortenedUrl = "wQ"
+                            ShortenedUrl = "https://localhost:7167/wQ"
                         });
                 });
 #pragma warning restore 612, 618

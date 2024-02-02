@@ -26,8 +26,10 @@ public static class UrlEndpoints
 
     private static async Task<IResult> ShortUrl(IMediator mediator, HttpContext httpContext, ShortUrlRequest shortUrlRequest, CancellationToken cancellationToken)
     {
-        var shortenedUrl = await mediator.Send(new ShortUrlCommand(shortUrlRequest.LongUrl), cancellationToken);
+        string appUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
 
-        return Results.Ok($"{httpContext.Request.Scheme}://{httpContext.Request.Host}/{shortenedUrl}");
+        var shortenedUrl = await mediator.Send(new ShortUrlCommand(appUrl, shortUrlRequest.LongUrl), cancellationToken);
+
+        return Results.Ok(shortenedUrl);
     }
 }

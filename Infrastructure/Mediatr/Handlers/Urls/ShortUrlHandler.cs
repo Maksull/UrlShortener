@@ -29,7 +29,10 @@ public sealed class ShortUrlHandler : IRequestHandler<ShortUrlCommand, string>
 
         await _apiDataContext.SaveChangesAsync(cancellationToken);
 
-        url.ShortenedUrl = _hashids.EncodeLong(url.Id);
+        var code = _hashids.EncodeLong(url.Id);
+
+        url.Code = code;
+        url.ShortenedUrl = $"{request.AppUrl}/{code}";
 
         _apiDataContext.Urls.Update(url);
 
