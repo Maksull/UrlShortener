@@ -24,10 +24,10 @@ public static class UrlEndpoints
         return Results.NotFound();
     }
 
-    private static async Task<IResult> ShortUrl(IMediator mediator, ShortUrlRequest shortUrlRequest, CancellationToken cancellationToken)
+    private static async Task<IResult> ShortUrl(IMediator mediator, HttpContext httpContext, ShortUrlRequest shortUrlRequest, CancellationToken cancellationToken)
     {
         var shortenedUrl = await mediator.Send(new ShortUrlCommand(shortUrlRequest.LongUrl), cancellationToken);
 
-        return Results.Ok(shortenedUrl);
+        return Results.Ok($"{httpContext.Request.Scheme}://{httpContext.Request.Host}/{shortenedUrl}");
     }
 }
