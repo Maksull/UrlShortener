@@ -22,6 +22,7 @@ namespace Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     OriginalUrl = table.Column<string>(type: "text", nullable: false),
                     ShortenedUrl = table.Column<string>(type: "text", nullable: false),
+                    Code = table.Column<string>(type: "text", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -31,12 +32,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Urls",
-                columns: new[] { "Id", "CreatedAt", "OriginalUrl", "ShortenedUrl" },
+                columns: new[] { "Id", "Code", "CreatedAt", "OriginalUrl", "ShortenedUrl" },
                 values: new object[,]
                 {
-                    { 1L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9594), "https://www.youtube.com/", "PQ" },
-                    { 2L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9611), "https://learn.microsoft.com/", "Mn" },
-                    { 3L, new DateTime(2024, 2, 2, 18, 25, 48, 934, DateTimeKind.Utc).AddTicks(9622), "https://www.linkedin.com/feed/", "wQ" }
+                    { 1L, "PQ", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5693), "https://www.youtube.com/", "https://localhost:7167/PQ" },
+                    { 2L, "Mn", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5726), "https://learn.microsoft.com/", "https://localhost:7167/Mn" },
+                    { 3L, "wQ", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5757), "https://www.linkedin.com/feed/", "https://localhost:7167/wQ" }
                 });
 
             migrationBuilder.CreateIndex(
