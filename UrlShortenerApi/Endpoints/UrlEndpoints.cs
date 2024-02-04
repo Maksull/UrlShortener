@@ -2,6 +2,7 @@
 using Core.Mediatr.Commands;
 using Core.Mediatr.Queries;
 using MediatR;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 namespace UrlShortenerApi.Endpoints;
 
@@ -9,8 +10,8 @@ public static class UrlEndpoints
 {
     public static IEndpointRouteBuilder MapUrlEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("{shortUrl}", GetOriginalUrl);
-        app.MapPost("", ShortUrl);
+        app.MapGet("{shortUrl}", GetOriginalUrl).AddFluentValidationAutoValidation();
+        app.MapPost("", ShortUrl).AddFluentValidationAutoValidation();
 
         return app;
     }
