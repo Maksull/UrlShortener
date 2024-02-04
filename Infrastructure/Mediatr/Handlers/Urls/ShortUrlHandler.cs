@@ -3,6 +3,7 @@ using Core.Mediatr.Commands;
 using HashidsNet;
 using Infrastructure.Data;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Mediatr.Handlers.Urls;
 
@@ -19,6 +20,13 @@ public sealed class ShortUrlHandler : IRequestHandler<ShortUrlCommand, string>
 
     public async Task<string> Handle(ShortUrlCommand request, CancellationToken cancellationToken)
     {
+        var urlInDb = await _apiDataContext.Urls.FirstOrDefaultAsync(u => u.OriginalUrl == request.LongUrl, cancellationToken);
+
+        if (urlInDb is not null)
+        {
+            return urlInDb.ShortenedUrl;
+        }
+
         var url = new Url()
         {
             OriginalUrl = request.LongUrl,
