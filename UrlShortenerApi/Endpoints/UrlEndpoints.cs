@@ -2,6 +2,7 @@
 using Core.Mediatr.Commands;
 using Core.Mediatr.Queries;
 using MediatR;
+using UrlShortenerApi.Filters;
 
 namespace UrlShortenerApi.Endpoints;
 
@@ -10,7 +11,7 @@ public static class UrlEndpoints
     public static IEndpointRouteBuilder MapUrlEndpoints(this IEndpointRouteBuilder app)
     {
         app.MapGet("{shortUrl}", GetOriginalUrl);
-        app.MapPost("", ShortUrl);
+        app.MapPost("", ShortUrl).AddEndpointFilter<ValidationFilter<ShortUrlRequest>>();
 
         return app;
     }
