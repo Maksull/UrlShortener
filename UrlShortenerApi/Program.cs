@@ -8,11 +8,15 @@ using Infrastructure.Mediatr.Handlers.Urls;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using UrlShortenerApi.Endpoints;
+using UrlShortenerApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 builder.Services.AddDbContext<ApiDataContext>(opts =>
 {
@@ -41,6 +45,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseExceptionHandler();
 
 app.MapUrlEndpoints();
 
