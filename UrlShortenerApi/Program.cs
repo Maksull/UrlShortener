@@ -15,7 +15,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddOutputCache();
+builder.Services.AddOutputCache(opts =>
+{
+    opts.AddBasePolicy(builder =>
+        builder.Expire(TimeSpan.FromSeconds(30)));
+});
 
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
