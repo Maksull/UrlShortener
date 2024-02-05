@@ -10,15 +10,25 @@ public static class UrlEndpoints
 {
     public static IEndpointRouteBuilder MapUrlEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("{shortUrl}", GetOriginalUrl).AddFluentValidationAutoValidation();
+        app.MapGet("get/{code}", GetOriginalUrl).AddFluentValidationAutoValidation().CacheOutput();
+        app.MapGet("{code}", RedirectToOriginalUrl).AddFluentValidationAutoValidation();
         app.MapPost("", ShortUrl).AddFluentValidationAutoValidation();
 
         return app;
     }
 
-    private static async Task<IResult> GetOriginalUrl(IMediator mediator, string shortUrl, CancellationToken cancellationToken)
+    private static async Task<IResult> GetOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
     {
-        var originalUrl = await mediator.Send(new GetOriginalUrlQuery(shortUrl), cancellationToken);
+        var originalUrl = await mediator.Send(new GetOriginalUrlQuery(code), cancellationToken);
+
+        if (originalUrl is not null) return Results.Ok(originalUrl);
+
+        return Results.NotFound();
+    }
+
+    private static async Task<IResult> RedirectToOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
+    {
+        var originalUrl = await mediator.Send(new GetOriginalUrlQuery(code), cancellationToken);
 
         if (originalUrl is not null) return Results.Redirect(originalUrl);
 

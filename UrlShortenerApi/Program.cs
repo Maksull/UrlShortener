@@ -15,6 +15,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddOutputCache(opts =>
+{
+    opts.AddBasePolicy(builder =>
+        builder.Expire(TimeSpan.FromSeconds(30)));
+});
+
 builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
 builder.Services.AddProblemDetails();
 
@@ -37,6 +43,8 @@ builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavi
 
 
 var app = builder.Build();
+
+app.UseOutputCache();
 
 if (app.Environment.IsDevelopment())
 {
