@@ -7,7 +7,6 @@ using Infrastructure.Mediatr.Behaviors;
 using Infrastructure.Mediatr.Handlers.Urls;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using StackExchange.Redis;
 using UrlShortenerApi.Caching;
 using UrlShortenerApi.Endpoints;
 using UrlShortenerApi.Middlewares;
@@ -43,9 +42,10 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining<Sh
 
 builder.Services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
-builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
-    ConnectionMultiplexer.Connect(builder.Configuration.GetConnectionString("RedisCache")!)
-);
+builder.Services.AddStackExchangeRedisCache(opts =>
+{
+    opts.Configuration = builder.Configuration.GetConnectionString("RedisCache");
+});
 
 
 var app = builder.Build();
