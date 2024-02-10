@@ -31,6 +31,7 @@ public sealed class ShortUrlHandler : IRequestHandler<ShortUrlCommand, string>
         {
             OriginalUrl = request.LongUrl,
             CreatedAt = DateTime.UtcNow,
+            ExpireAt = DateTime.UtcNow.AddMinutes(5),
         };
 
         await _apiDataContext.Urls.AddAsync(url, cancellationToken);

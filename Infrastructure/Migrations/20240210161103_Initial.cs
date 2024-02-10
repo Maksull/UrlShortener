@@ -23,7 +23,8 @@ namespace Infrastructure.Migrations
                     OriginalUrl = table.Column<string>(type: "text", nullable: false),
                     ShortenedUrl = table.Column<string>(type: "text", nullable: false),
                     Code = table.Column<string>(type: "text", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ExpireAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -32,12 +33,12 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Urls",
-                columns: new[] { "Id", "Code", "CreatedAt", "OriginalUrl", "ShortenedUrl" },
+                columns: new[] { "Id", "Code", "CreatedAt", "ExpireAt", "OriginalUrl", "ShortenedUrl" },
                 values: new object[,]
                 {
-                    { 1L, "PQ", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5693), "https://www.youtube.com/", "https://localhost:7167/PQ" },
-                    { 2L, "Mn", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5726), "https://learn.microsoft.com/", "https://localhost:7167/Mn" },
-                    { 3L, "wQ", new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5757), "https://www.linkedin.com/feed/", "https://localhost:7167/wQ" }
+                    { 1L, "PQ", new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6717), new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6719), "https://www.youtube.com/", "https://localhost:7167/PQ" },
+                    { 2L, "Mn", new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6749), new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6750), "https://learn.microsoft.com/", "https://localhost:7167/Mn" },
+                    { 3L, "wQ", new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6775), new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6776), "https://www.linkedin.com/feed/", "https://localhost:7167/wQ" }
                 });
 
             migrationBuilder.CreateIndex(

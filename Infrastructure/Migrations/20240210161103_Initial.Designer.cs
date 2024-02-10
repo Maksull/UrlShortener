@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApiDataContext))]
-    [Migration("20240202193500_Initial")]
+    [Migration("20240210161103_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -40,6 +40,9 @@ namespace Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<DateTime?>("ExpireAt")
+                        .HasColumnType("timestamp with time zone");
+
                     b.Property<string>("OriginalUrl")
                         .IsRequired()
                         .HasColumnType("text");
@@ -63,7 +66,8 @@ namespace Infrastructure.Migrations
                         {
                             Id = 1L,
                             Code = "PQ",
-                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5693),
+                            CreatedAt = new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6717),
+                            ExpireAt = new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6719),
                             OriginalUrl = "https://www.youtube.com/",
                             ShortenedUrl = "https://localhost:7167/PQ"
                         },
@@ -71,7 +75,8 @@ namespace Infrastructure.Migrations
                         {
                             Id = 2L,
                             Code = "Mn",
-                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5726),
+                            CreatedAt = new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6749),
+                            ExpireAt = new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6750),
                             OriginalUrl = "https://learn.microsoft.com/",
                             ShortenedUrl = "https://localhost:7167/Mn"
                         },
@@ -79,7 +84,8 @@ namespace Infrastructure.Migrations
                         {
                             Id = 3L,
                             Code = "wQ",
-                            CreatedAt = new DateTime(2024, 2, 2, 19, 35, 0, 180, DateTimeKind.Utc).AddTicks(5757),
+                            CreatedAt = new DateTime(2024, 2, 10, 16, 11, 3, 515, DateTimeKind.Utc).AddTicks(6775),
+                            ExpireAt = new DateTime(2024, 2, 10, 16, 16, 3, 515, DateTimeKind.Utc).AddTicks(6776),
                             OriginalUrl = "https://www.linkedin.com/feed/",
                             ShortenedUrl = "https://localhost:7167/wQ"
                         });

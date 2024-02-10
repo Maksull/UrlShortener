@@ -20,6 +20,7 @@ internal sealed class UrlConfiguration : IEntityTypeConfiguration<Url>
                 ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(1)}",
                 Code = hashIds.EncodeLong(1),
                 CreatedAt = DateTime.UtcNow,
+                ExpireAt = DateTime.UtcNow.AddMinutes(5),
             },
             new()
             {
@@ -28,6 +29,7 @@ internal sealed class UrlConfiguration : IEntityTypeConfiguration<Url>
                 ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(2)}",
                 Code = hashIds.EncodeLong(2),
                 CreatedAt = DateTime.UtcNow,
+                ExpireAt = DateTime.UtcNow.AddMinutes(5),
             },
             new()
             {
@@ -36,6 +38,7 @@ internal sealed class UrlConfiguration : IEntityTypeConfiguration<Url>
                 ShortenedUrl = $"https://localhost:7167/{hashIds.EncodeLong(3)}",
                 Code = hashIds.EncodeLong(3),
                 CreatedAt = DateTime.UtcNow,
+                ExpireAt = DateTime.UtcNow.AddMinutes(5),
             },
         };
 
