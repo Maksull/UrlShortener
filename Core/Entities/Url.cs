@@ -8,4 +8,5 @@ public sealed class Url
     public string ShortenedUrl { get; set; } = string.Empty;
     public string Code { get; set; } = string.Empty;
     public required DateTime CreatedAt { get; set; }
+    public required DateTime ExpireAt { get; set; }
 }
