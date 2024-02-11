@@ -11,11 +11,13 @@ public sealed class ShortUrlHandler : IRequestHandler<ShortUrlCommand, string>
 {
     private readonly ApiDataContext _apiDataContext;
     private readonly IHashids _hashids;
+    private readonly IMediator _mediator;
 
-    public ShortUrlHandler(ApiDataContext apiDataContext, IHashids hashids)
+    public ShortUrlHandler(ApiDataContext apiDataContext, IHashids hashids, IMediator mediator)
     {
         _apiDataContext = apiDataContext;
         _hashids = hashids;
+        _mediator = mediator;
     }
 
     public async Task<string> Handle(ShortUrlCommand request, CancellationToken cancellationToken)
@@ -24,8 +26,11 @@ public sealed class ShortUrlHandler : IRequestHandler<ShortUrlCommand, string>
 
         if (urlInDb is not null)
         {
+            await _mediator.Send(new ProlongUrlExpirationCommand(urlInDb.Id), cancellationToken);
+
             return urlInDb.ShortenedUrl;
         }
+
 
         var url = new Url()
         {
