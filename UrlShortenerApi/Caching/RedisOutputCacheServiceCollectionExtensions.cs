@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using Microsoft.Extensions.Options;
 
 namespace UrlShortenerApi.Caching;
 
