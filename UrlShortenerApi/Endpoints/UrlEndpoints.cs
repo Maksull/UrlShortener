@@ -10,7 +10,7 @@ public static class UrlEndpoints
 {
     public static IEndpointRouteBuilder MapUrlEndpoints(this IEndpointRouteBuilder app)
     {
-        app.MapGet("get/{code}", GetOriginalUrl).AddFluentValidationAutoValidation().CacheOutput();
+        app.MapGet("{code}+", GetOriginalUrl).AddFluentValidationAutoValidation().CacheOutput();
         app.MapGet("{code}", RedirectToOriginalUrl).AddFluentValidationAutoValidation();
         app.MapPost("", ShortUrl).AddFluentValidationAutoValidation();
 
