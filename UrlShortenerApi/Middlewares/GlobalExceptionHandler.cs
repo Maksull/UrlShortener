@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Diagnostics;
+﻿using Core.Logging.ExceptionHandler;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 
 namespace UrlShortenerApi.Middlewares;
@@ -14,7 +15,7 @@ public sealed class GlobalExceptionHandler : IExceptionHandler
 
     public async ValueTask<bool> TryHandleAsync(HttpContext httpContext, Exception exception, CancellationToken cancellationToken)
     {
-        _logger.LogError("An unhandled exception occurred. Exception: {exception}", exception.ToString());
+        _logger.LogUnhandledException(exception.ToString());
 
         httpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
 

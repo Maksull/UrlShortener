@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.OutputCaching;
+﻿using Core.Logging.Caching;
+using Microsoft.AspNetCore.OutputCaching;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using StackExchange.Redis;
@@ -8,8 +9,8 @@ namespace UrlShortenerApi.Caching;
 public sealed class RedisOutputCacheStore : IOutputCacheStore
 {
     private IDistributedCache _cache;
-    private IConfiguration _configuration;
-    private readonly ILogger<RedisOutputCacheStore> _logger;
+    private readonly IConfiguration _configuration;
+    private readonly ILogger _logger;
     private readonly IConnectionMultiplexer _connectionMultiplexer;
     private bool _isConnectionError;
     private DateTime _lastReconnectAttempt = DateTime.UtcNow;
@@ -29,7 +30,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             {
                 await Reconnect();
             }
-            else if (!_isConnectionError)
+            if (!_isConnectionError)
             {
                 var value = await _cache.GetAsync(key, cancellationToken);
 
@@ -41,7 +42,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
         catch (RedisConnectionException e)
         {
             _isConnectionError = true;
-            _logger.LogCritical("Redis connection failed: {RedisConnectionError}", e.ToString());
+            _logger.LogRedisConnectionFailed(e.ToString());
 
             return null;
         }
@@ -55,7 +56,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             {
                 await Reconnect();
             }
-            else if (!_isConnectionError)
+            if (!_isConnectionError)
             {
                 var cacheEntryOptions = new DistributedCacheEntryOptions()
                         .SetAbsoluteExpiration(validFor);
@@ -66,7 +67,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
         catch (RedisConnectionException e)
         {
             _isConnectionError = true;
-            _logger.LogCritical("Redis connection failed: {RedisConnectionError}", e.ToString());
+            _logger.LogRedisConnectionFailed(e.ToString());
         }
     }
 
@@ -78,7 +79,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             {
                 await Reconnect();
             }
-            else if (!_isConnectionError)
+            if (!_isConnectionError)
             {
                 await ConnectionMultiplexer.ConnectAsync(_configuration.GetConnectionString("RedisCache")!);
 
@@ -96,7 +97,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
         catch (RedisConnectionException e)
         {
             _isConnectionError = true;
-            _logger.LogCritical("Redis connection failed: {RedisConnectionError}", e.ToString());
+            _logger.LogRedisConnectionFailed(e.ToString());
         }
     }
 
@@ -115,20 +116,19 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             var redisConnectionString = _configuration.GetConnectionString("RedisCache")!;
             var redis = await ConnectionMultiplexer.ConnectAsync(redisConnectionString);
 
-            if (redis.IsConnected)
+            if (!redis.IsConnected) return;
+            
+            _cache = new RedisCache(new RedisCacheOptions
             {
-                _cache = new RedisCache(new RedisCacheOptions
-                {
-                    Configuration = redisConnectionString,
-                    InstanceName = "Redis"
-                });
+                Configuration = redisConnectionString,
+                InstanceName = "Redis"
+            });
 
-                _isConnectionError = false;
-            }
+            _isConnectionError = false;
         }
         catch (RedisConnectionException e)
         {
-            _logger.LogCritical("Redis reconnect failed: {RedisReconnectError}", e.ToString());
+            _logger.LogRedisConnectionFailed(e.ToString());
         }
     }
 }
