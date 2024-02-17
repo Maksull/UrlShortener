@@ -1,9 +1,11 @@
 ﻿using Core.Validators.Urls;
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Hangfire;
+using Hangfire.PostgreSql;
 using HashidsNet;
-using Infrastructure.BackgroundServices.Interfaces;
 using Infrastructure.BackgroundServices;
+using Infrastructure.BackgroundServices.Interfaces;
 using Infrastructure.Data;
 using Infrastructure.Mediatr.Behaviors;
 using Infrastructure.Mediatr.Handlers.Urls;
@@ -11,8 +13,6 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using UrlShortenerApi.Caching;
 using UrlShortenerApi.Middlewares;
-using Hangfire;
-using Hangfire.PostgreSql;
 
 namespace UrlShortenerApi.Dependencies;
 
@@ -21,6 +21,7 @@ public static class Dependencies
     public static IServiceCollection ConfigureServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.ConfigureDataContext(configuration);
+        services.ConfigureCors(configuration);
         services.ConfigureExceptionHandler();
         services.ConfigureRedisOutputCache(configuration);
         services.ConfigureFluentValidation();
@@ -37,6 +38,15 @@ public static class Dependencies
         {
             opts.UseNpgsql(configuration.GetConnectionString("UrlShortenerDb")).EnableSensitiveDataLogging();
         });
+    }
+
+    private static void ConfigureCors(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddCors(opts => opts.AddPolicy("UrlShortenerFrontend", policy =>
+        {
+            var t = configuration["UrlShortenerFrontend:Url"]!;
+            policy.WithOrigins(configuration["UrlShortenerFrontend:Url"]!).AllowAnyHeader().AllowAnyMethod().AllowCredentials();
+        }));
     }
 
     private static void ConfigureExceptionHandler(this IServiceCollection services)

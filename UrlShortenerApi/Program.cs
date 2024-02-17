@@ -19,6 +19,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseCors("UrlShortenerFrontend");
+
 app.UseOutputCache();
 
 app.UseHangfireDashboard();
