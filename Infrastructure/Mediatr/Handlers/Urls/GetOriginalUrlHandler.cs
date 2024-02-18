@@ -18,7 +18,7 @@ public sealed class GetOriginalUrlHandler : IRequestHandler<GetOriginalUrlQuery,
 
     public async Task<string?> Handle(GetOriginalUrlQuery request, CancellationToken cancellationToken)
     {
-        var urlId = _hashids.DecodeSingleLong(request.ShortUrl);
+        var urlId = _hashids.DecodeSingleLong(request.Code);
 
         var url = await _apiDataContext.Urls.FindAsync(urlId, cancellationToken);
 

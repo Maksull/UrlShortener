@@ -4,8 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data;
 
-public sealed class ApiDataContext : DbContext
+public class ApiDataContext : DbContext
 {
+    public ApiDataContext() { }
     public ApiDataContext(DbContextOptions<ApiDataContext> options) : base(options) { }
 
     public DbSet<Url> Urls => Set<Url>();
