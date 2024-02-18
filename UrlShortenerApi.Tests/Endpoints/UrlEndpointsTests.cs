@@ -1,10 +1,10 @@
-﻿using MediatR;
+﻿using Core.Contracts.UrlEndpoints;
+using Core.Mediatr.Queries;
+using MediatR;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using NSubstitute;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NSubstitute.ReturnsExtensions;
 using UrlShortenerApi.Endpoints;
 
 namespace UrlShortenerApi.Tests.Endpoints;
@@ -18,32 +18,81 @@ public sealed class UrlEndpointsTests
         _mediator = Substitute.For<IMediator>();
     }
 
-    #region CreateCategory
+
+    [Fact]
+    public async void GetOriginalUrl_WhenCalled_ReturnOk()
+    {
+        //Arrange
+        string originalUrl = "https://www.youtube.com/";
+        _mediator.Send(Arg.Any<GetOriginalUrlQuery>())
+            .ReturnsForAnyArgs(originalUrl);
+
+        //Act
+        var response = (await UrlEndpoints.GetOriginalUrl(_mediator, "AA", CancellationToken.None) as Ok<string>)!;
+        var result = response.Value;
+
+        //Assert
+        result.Should().BeEquivalentTo(originalUrl);
+    }
+
+    [Fact]
+    public async void GetOriginalUrl_WhenCalled_ReturnNotFound()
+    {
+        //Arrange
+        _mediator.Send(Arg.Any<GetOriginalUrlQuery>())
+            .ReturnsNullForAnyArgs();
+
+        //Act
+        var response = (await UrlEndpoints.GetOriginalUrl(_mediator, "AA", CancellationToken.None) as NotFound);
+
+        //Assert
+        response.Should().BeOfType<NotFound>();
+    }
+
+    [Fact]
+    public async void RedirectToOriginalUrl_WhenCalled_ReturnRedirect()
+    {
+        //Arrange
+        string originalUrl = "https://www.youtube.com/";
+        _mediator.Send(Arg.Any<GetOriginalUrlQuery>())
+            .ReturnsForAnyArgs(originalUrl);
+
+        //Act
+        var response = (await UrlEndpoints.RedirectToOriginalUrl(_mediator, "AA", CancellationToken.None) as RedirectHttpResult)!;
+
+        //Assert
+        response.Should().BeOfType<RedirectHttpResult>();
+    }
+
+    [Fact]
+    public async void RedirectToOriginalUrl_WhenCalled_ReturnNotFound()
+    {
+        //Arrange
+        _mediator.Send(Arg.Any<GetOriginalUrlQuery>())
+            .ReturnsNullForAnyArgs();
+
+        //Act
+        var response = (await UrlEndpoints.RedirectToOriginalUrl(_mediator, "AA", CancellationToken.None) as NotFound);
+
+        //Assert
+        response.Should().BeOfType<NotFound>();
+    }
 
     [Fact]
     public async void ShortUrl_WhenCalled_ReturnOk()
     {
         //Arrange
-        /*var category = _categoryFaker.Generate();
-        CreateCategoryRequest createCategory = new()
-        {
-            Name = category.Name
-        };
-        _mediator.Send(Arg.Any<CreateCategoryCommand>())
-            .ReturnsForAnyArgs(category);
+        var httpContext = Substitute.For<HttpContext>();
+        string originalUrl = "https://www.youtube.com/";
+        string shortenedUrl = "https://localhost:7167/BA";
+        _mediator.Send(Arg.Any<GetOriginalUrlQuery>())
+            .ReturnsForAnyArgs(shortenedUrl);
 
         //Act
-        var t = await UrlEndpoints.Sh
-        var response = (await _controller.CreateCategory(createCategory, CancellationToken.None) as OkObjectResult)!;
-        var result = response.Value as CategoryResponse;
+        var response = (await UrlEndpoints.ShortUrl(_mediator, httpContext, new ShortUrlRequest(originalUrl), CancellationToken.None) as Ok<string>)!;
+        var result = response.Value;
 
         //Assert
-        response.Should().BeOfType<OkObjectResult>();
-        result.Should().BeOfType<CategoryResponse>();
-        result.Should().BeEquivalentTo(category, opts =>
-            opts.Excluding(c => c.CategoryId)
-        );*/
+        result.Should().BeEquivalentTo(shortenedUrl);
     }
-
-    #endregion
 }

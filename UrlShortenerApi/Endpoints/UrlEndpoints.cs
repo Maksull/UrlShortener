@@ -17,7 +17,7 @@ public static class UrlEndpoints
         return app;
     }
 
-    private static async Task<IResult> GetOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
+    public static async Task<IResult> GetOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
     {
         var originalUrl = await mediator.Send(new GetOriginalUrlQuery(code), cancellationToken);
 
@@ -26,7 +26,7 @@ public static class UrlEndpoints
         return Results.NotFound();
     }
 
-    private static async Task<IResult> RedirectToOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
+    public static async Task<IResult> RedirectToOriginalUrl(IMediator mediator, string code, CancellationToken cancellationToken)
     {
         var originalUrl = await mediator.Send(new GetOriginalUrlQuery(code), cancellationToken);
 
@@ -35,7 +35,7 @@ public static class UrlEndpoints
         return Results.NotFound();
     }
 
-    private static async Task<IResult> ShortUrl(IMediator mediator, HttpContext httpContext, ShortUrlRequest shortUrlRequest, CancellationToken cancellationToken)
+    public static async Task<IResult> ShortUrl(IMediator mediator, HttpContext httpContext, ShortUrlRequest shortUrlRequest, CancellationToken cancellationToken)
     {
         string appUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}";
 
