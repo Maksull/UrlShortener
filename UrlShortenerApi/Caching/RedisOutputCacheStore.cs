@@ -11,7 +11,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
     private IDistributedCache _cache;
     private readonly IConfiguration _configuration;
     private readonly ILogger _logger;
-    private readonly IConnectionMultiplexer _connectionMultiplexer;
+    private IConnectionMultiplexer _connectionMultiplexer;
     private bool _isConnectionError;
     private DateTime _lastReconnectAttempt = DateTime.UtcNow;
 
@@ -20,6 +20,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
         _cache = cache;
         _configuration = configuration;
         _logger = logger;
+        _connectionMultiplexer = ConnectionMultiplexer.Connect(_configuration.GetConnectionString("RedisCache")!);
     }
 
     public async ValueTask<byte[]?> GetAsync(string key, CancellationToken cancellationToken)
@@ -81,8 +82,6 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             }
             if (!_isConnectionError)
             {
-                await ConnectionMultiplexer.ConnectAsync(_configuration.GetConnectionString("RedisCache")!);
-
                 var db = _connectionMultiplexer.GetDatabase();
                 var cachedKeys = await db.SetMembersAsync(tag);
 
@@ -123,6 +122,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
                 Configuration = redisConnectionString,
                 InstanceName = "Redis"
             });
+            _connectionMultiplexer = redis;
 
             _isConnectionError = false;
         }

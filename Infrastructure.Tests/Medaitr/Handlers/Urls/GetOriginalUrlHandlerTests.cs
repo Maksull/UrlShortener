@@ -1,6 +1,5 @@
 ﻿using Core.Entities;
 using Core.Mediatr.Queries;
-using FluentAssertions;
 using HashidsNet;
 using Infrastructure.Data;
 using Infrastructure.Mediatr.Handlers.Urls;
