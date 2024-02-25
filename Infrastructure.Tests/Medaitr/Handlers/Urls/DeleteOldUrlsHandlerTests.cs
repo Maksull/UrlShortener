@@ -1,6 +1,5 @@
 ﻿using Core.Entities;
 using Core.Mediatr.Commands;
-using FluentAssertions;
 using Infrastructure.Data;
 using Infrastructure.Mediatr.Handlers.Urls;
 using Microsoft.EntityFrameworkCore;
