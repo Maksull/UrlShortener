@@ -11,6 +11,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
     private IDistributedCache _cache;
     private readonly IConfiguration _configuration;
     private readonly ILogger _logger;
+
     private IConnectionMultiplexer? _connectionMultiplexer;
     private bool _isConnectionError;
     private DateTime _lastReconnectAttempt = DateTime.UtcNow;
@@ -91,6 +92,7 @@ public sealed class RedisOutputCacheStore : IOutputCacheStore
             if (!_isConnectionError)
             {
                 var db = _connectionMultiplexer!.GetDatabase();
+
                 var cachedKeys = await db.SetMembersAsync(tag);
 
                 var keys = cachedKeys
